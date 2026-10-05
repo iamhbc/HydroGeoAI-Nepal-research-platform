@@ -1,0 +1,40 @@
+services:
+  db:
+    image: postgis/postgis:16-3.4
+    environment:
+      POSTGRES_USER: hydrogeoai
+      POSTGRES_PASSWORD: hydrogeoai
+      POSTGRES_DB: hydrogeoai
+    ports: ["5432:5432"]
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/01_init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hydrogeoai"]
+      interval: 5s
+      retries: 10
+
+  api:
+    build: .
+    depends_on:
+      db: { condition: service_healthy }
+    environment:
+      HYDROGEOAI_REGISTRY_URL: postgresql+psycopg://hydrogeoai:hydrogeoai@db:5432/hydrogeoai
+      HYDROGEOAI_POSTGIS_URL: postgresql+psycopg://hydrogeoai:hydrogeoai@db:5432/hydrogeoai
+      HYDROGEOAI_ADMIN_KEY: ${HYDROGEOAI_ADMIN_KEY:-change-me}
+      HYDROGEOAI_CORS: http://localhost:3000
+    ports: ["8000:8000"]
+    volumes:
+      - ./data:/app/data
+      - ./results:/app/results
+      - ./experiments_registry:/app/experiments_registry
+
+  web:
+    build: ./web
+    depends_on: [api]
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8000
+    ports: ["3000:3000"]
+
+volumes:
+  pgdata:

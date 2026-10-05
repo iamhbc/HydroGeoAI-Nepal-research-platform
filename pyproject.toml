@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hydrogeoai"
+version = "0.1.0"
+description = "HydroGeoAI-Nepal: multimodal geospatial-temporal AI for hydroclimatic extremes under sparse and nonstationary mountain observations"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "GPL-3.0-or-later" }
+authors = [{ name = "HydroGeoAI-Nepal contributors" }]
+dependencies = [
+  "numpy>=1.24",
+  "pandas>=2.0",
+  "scipy>=1.10",
+  "scikit-learn>=1.3",
+  "torch>=2.1",
+  "pyyaml>=6.0",
+  "pyarrow>=12",
+  "xarray>=2023.1",
+  "matplotlib>=3.7",
+  "sqlalchemy>=2.0",
+  "pydantic>=2.0",
+]
+
+[project.optional-dependencies]
+api = ["fastapi>=0.110", "uvicorn>=0.27", "httpx>=0.27"]
+geo = ["geopandas>=0.14", "rasterio>=1.3", "rioxarray>=0.15", "shapely>=2.0", "pyproj>=3.6", "cartopy>=0.22"]
+gbm = ["xgboost>=2.0", "lightgbm>=4.0"]
+explain = ["shap>=0.44"]
+hf = ["huggingface_hub>=0.23", "datasets>=2.18", "safetensors>=0.4", "gradio>=4.0"]
+io = ["netCDF4>=1.6", "h5py>=3.10", "zarr>=2.16"]
+db = ["psycopg[binary]>=3.1", "geoalchemy2>=0.14"]
+dev = ["pytest>=7.4", "ruff>=0.4"]
+all = ["hydrogeoai[api,geo,gbm,explain,hf,io,db,dev]"]
+
+[project.scripts]
+hydrogeoai = "hydrogeoai.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+filterwarnings = ["ignore::DeprecationWarning"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py310"

@@ -1,0 +1,45 @@
+{
+  "datasets": {
+    "hydrogeoai-nepal@6aed3932bea2": {
+      "name": "hydrogeoai-nepal",
+      "version": "6aed3932bea2",
+      "files": {
+        "dir": "data/processed/6aed3932bea2"
+      },
+      "metadata": {
+        "temporal_coverage": [
+          "1990-01-01",
+          "2024-12-31"
+        ],
+        "n_stations": 30,
+        "n_records": 383520,
+        "missing_pct": {
+          "precip": 10.026,
+          "tmax": 9.776,
+          "tmin": 9.776,
+          "rh": 36.421
+        },
+        "source": "synthetic"
+      },
+      "status": "approved",
+      "registered": "2026-10-05T01:59:18+00:00",
+      "updated": "2026-10-05T02:29:28+00:00",
+      "history": [
+        {
+          "event": "register",
+          "time": "2026-10-05T01:59:18+00:00"
+        },
+        {
+          "event": "checked",
+          "note": "automated QC completed",
+          "time": "2026-10-05T01:59:18+00:00"
+        },
+        {
+          "event": "approved",
+          "note": "",
+          "time": "2026-10-05T02:29:28+00:00"
+        }
+      ]
+    }
+  }
+}

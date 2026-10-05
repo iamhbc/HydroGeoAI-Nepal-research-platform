@@ -1,0 +1,38 @@
+# Hydroclimatic event taxonomy. Thresholds are station-specific percentiles fitted ONLY on the
+# reference/training period to avoid leakage. Every definition is justified in docs/03_event_taxonomy.md.
+wet_day_mm: 1.0
+
+precipitation:
+  extreme_wet_day:        { percentile: 95, of: wet_days }            # R95p-style
+  very_extreme_wet_day:   { percentile: 99, of: wet_days }            # R99p-style
+  extreme_rainfall_event: { window_days: 3, percentile: 99 }          # multi-day accumulation
+  consecutive_wet_days:   { min_days: 5 }
+  persistence:            { window_days: 10, min_wet_days: 8 }
+
+dry:
+  dry_spell:              { min_days: 15 }                            # CDD-style
+  precipitation_deficit:  { window_days: 30, spi_threshold: -1.0 }
+  meteorological_drought: { window_days: 90, spi_threshold: -1.0 }
+
+thermal:
+  hot_day:    { variable: tmax, percentile: 90, window_days: 15 }     # TX90p (calendar-day window)
+  warm_spell: { min_days: 3 }                                         # relaxed WSDI for daily labels
+  cold_night: { variable: tmin, percentile: 10, window_days: 15 }     # TN10p
+
+compound:
+  hot_dry:                    { hot: hot_day, dry_spi_window: 30, spi_threshold: -1.0 }
+  wet_hot:                    { wet: extreme_wet_day, hot: hot_day }
+  rain_after_dryness:         { antecedent_dry_days: 20, wet: extreme_wet_day }
+
+whiplash:
+  spi_window_days: 30
+  dry_threshold: -1.0
+  wet_threshold: 1.0
+  max_transition_days: 30
+  min_separation_days: 30
+  decades: [[1990, 2000], [2001, 2010], [2011, 2020], [2021, 2024]]
+
+prediction_target:
+  name: extreme_wet_day
+  lead_days: 1          # predict the event on day t+1 from information up to day t
+  horizon_days: 1       # event anywhere in (t, t+horizon]

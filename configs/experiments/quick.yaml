@@ -1,0 +1,13 @@
+# Fast smoke-test profile (~ a few minutes on a laptop CPU). Inherits from main.yaml.
+inherits: configs/experiments/main.yaml
+name: quick
+max_train_samples: 8000
+max_eval_samples: 10000
+baselines: [climatology, persistence, logistic, random_forest, hist_gbm]
+deep_models: [lstm, transformer]
+deep: { epochs: 2, patience: 1 }
+pretrain: { epochs: 1, max_samples: 8000 }
+uncertainty: { ensemble_members: 2, mc_dropout_samples: 5 }
+bootstrap: { n: 30 }
+robustness: { missing_rates: [0.0, 0.3] }
+label_fractions: [0.1, 1.0]

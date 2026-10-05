@@ -1,0 +1,14 @@
+# Hydroclimatic Encoder v1 (self-supervised). See docs/04_methodology.md
+architecture: transformer_encoder
+d_model: 64
+n_layers: 3
+n_heads: 4
+dropout: 0.1
+max_len: 366
+inputs: [precip_log1p, tmax_anom, tmin_anom, doy_sin, doy_cos, observed_mask]
+objectives:
+  masked_reconstruction: { mask_ratio: 0.3, mean_span: 5, loss: masked_mse }
+  temporal_contrastive:  { weight: 0.1, temperature: 0.1, views: [jitter, crop, mask] }
+  multiscale:            { weight: 0.2, scales_days: [7, 30] }
+spatial_consistency:
+  enabled: false   # only with training-station neighbours; never uses test stations (leakage)

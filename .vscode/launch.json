@@ -1,0 +1,12 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    { "name": "API (uvicorn)", "type": "debugpy", "request": "launch", "module": "uvicorn",
+      "args": ["hydrogeoai.api.main:app", "--reload", "--port", "8000"], "cwd": "${workspaceFolder}", "justMyCode": true },
+    { "name": "Build dataset", "type": "debugpy", "request": "launch", "module": "hydrogeoai.cli",
+      "args": ["data", "build"], "cwd": "${workspaceFolder}" },
+    { "name": "Quick experiment (temporal)", "type": "debugpy", "request": "launch", "module": "hydrogeoai.cli",
+      "args": ["experiment", "run", "--config", "configs/experiments/quick.yaml", "--modes", "temporal"], "cwd": "${workspaceFolder}" },
+    { "name": "Web (next dev)", "type": "node-terminal", "request": "launch", "command": "npm run dev", "cwd": "${workspaceFolder}/web" }
+  ]
+}

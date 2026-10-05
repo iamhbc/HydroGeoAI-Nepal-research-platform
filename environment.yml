@@ -1,0 +1,41 @@
+name: hydrogeoai
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - numpy
+  - pandas
+  - scipy
+  - scikit-learn
+  - pytorch
+  - xarray
+  - netcdf4
+  - h5py
+  - zarr
+  - pyarrow
+  - geopandas
+  - rasterio
+  - rioxarray
+  - shapely
+  - pyproj
+  - cartopy
+  - xgboost
+  - lightgbm
+  - shap
+  - matplotlib
+  - sqlalchemy
+  - psycopg
+  - geoalchemy2
+  - pyyaml
+  - pydantic
+  - fastapi
+  - uvicorn
+  - httpx
+  - pytest
+  - pip
+  - pip:
+      - huggingface_hub
+      - datasets
+      - safetensors
+      - gradio
+      - -e .

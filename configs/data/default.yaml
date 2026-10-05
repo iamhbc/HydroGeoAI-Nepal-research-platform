@@ -1,0 +1,41 @@
+# Data configuration. The default source is the SYNTHETIC generator, which exists only to
+# develop and test the pipeline end-to-end. Scientific conclusions require real observations
+# (see docs/02_data.md for DHM Nepal, APHRODITE, CHIRPS, ERA5-Land, SRTM/Copernicus DEM, etc.).
+source: synthetic          # synthetic | csv | parquet | netcdf
+dataset_name: hydrogeoai-nepal
+dataset_version: null      # null -> content hash assigned automatically
+paths:
+  raw: data/raw
+  interim: data/interim
+  processed: data/processed
+  external: data/external
+
+synthetic:
+  seed: 42
+  n_stations: 30
+  start: "1990-01-01"
+  end: "2024-12-31"
+  missing_block_rate: 0.002       # probability that a multi-day gap starts on a given day
+  inject_errors: true             # negative precip, duplicates, spikes -> exercised by QC
+  inject_inhomogeneities: 4       # stations with artificial relocation/sensor breaks (ground truth kept)
+  dem_resolution_deg: 0.05
+
+variables:
+  primary: [precip, tmax, tmin]
+  secondary: [rh, wind, srad, pressure]   # used when present
+
+crs:
+  geographic: "EPSG:4326"
+  projected: "EPSG:32645"        # WGS 84 / UTM zone 45N (covers most of Nepal)
+
+qc:
+  precip_max_mm: 500.0           # suspicious above this (Nepal daily records ~ 500 mm)
+  temp_min_c: -45.0
+  temp_max_c: 48.0
+  max_daily_temp_jump_c: 15.0
+  robust_z_spike: 6.0
+  min_annual_completeness: 0.8
+  nepal_bbox: [80.0, 26.3, 88.3, 30.5]   # lon_min, lat_min, lon_max, lat_max
+  dem_elevation_tolerance_m: 300.0
+
+reference_period: ["1991-01-01", "2010-12-31"]   # climatology / percentile thresholds (training years only)
