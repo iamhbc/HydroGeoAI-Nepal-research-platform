@@ -14,8 +14,8 @@ export default function Extremes() {
   const wl = useApi<any>(`/whiplash${qs({ station_id: region.station_id, basin: region.basin })}`);
   return (
     <>
-      <h1>Explore Extremes</h1>
-      <p className="sub">Station-specific thresholds fitted on the reference period only; labels are missing (not &quot;no event&quot;) when data are missing.</p>
+      <h1>Extreme events</h1>
+      <p className="sub">Select a place and a type of event. Each station has its own limit for &quot;extreme&quot;. Days with no data are not counted.</p>
       <div className="panel">
         <RegionPicker value={region} onChange={setRegion} />
         <label>Event type

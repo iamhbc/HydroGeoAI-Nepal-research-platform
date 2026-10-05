@@ -29,6 +29,20 @@ for r in (data.router, models.router, experiments.router, admin.router):
     app.include_router(r)
 
 
+@app.on_event("startup")
+def _warm_cache() -> None:
+    """Load the dataset and the landing-page summary in the background so the first visitor is fast."""
+    import threading
+
+    def warm():
+        try:
+            data.overview()
+        except Exception:  # noqa: BLE001 - no dataset yet; /health reports it
+            pass
+
+    threading.Thread(target=warm, daemon=True).start()
+
+
 @app.get("/health", tags=["system"])
 def health():
     st = get_state()

@@ -20,8 +20,8 @@ export default function Climate() {
   const station = useApi<any>(region.station_id ? `/stations/${region.station_id}` : null);
   return (
     <>
-      <h1>Explore Climate</h1>
-      <p className="sub">QC&apos;d series (values flagged as errors are excluded; originals are preserved in the dataset).</p>
+      <h1>Rain and temperature</h1>
+      <p className="sub">Select a place and a measurement. The chart shows checked data only. We remove bad values but keep the original data.</p>
       <div className="panel">
         <RegionPicker value={region} onChange={setRegion} />
         <div className="field-row">

@@ -11,7 +11,7 @@ export default function Dataset() {
   const s = qc.data?.summary;
   return (
     <>
-      <h1>Dataset &amp; Quality Control</h1>
+      <h1>Data quality</h1>
       <p className="sub">Data are never silently modified: every step is recorded with parameters and content hashes; QC adds flags and *_qc columns.</p>
       <Status loading={ds.loading || d.loading} error={ds.error || d.error} />
       {meta && <>

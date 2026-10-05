@@ -32,8 +32,8 @@ export default function Run() {
   const top = res ? [...res.predictions].sort((a: any, b: any) => b.probability - a.probability)[0] : null;
   return (
     <>
-      <h1>Run Model</h1>
-      <p className="sub">Phenomenon: extreme wet day on the next day (station-specific &gt;P95 of wet days). Output = prediction + confidence + uncertainty + explanation.</p>
+      <h1>Get a forecast</h1>
+      <p className="sub">Select a place and dates. Then click <b>Run analysis</b>. You get the chance of an extreme rain day for each next day, and how sure the model is.</p>
       <div className="panel">
         <RegionPicker value={region} onChange={setRegion} />
         <div className="field-row">

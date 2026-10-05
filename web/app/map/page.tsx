@@ -26,8 +26,8 @@ export default function MapPage() {
   const m = METRICS.find((x) => x[0] === metric)!;
   return (
     <>
-      <h1>Explore Map</h1>
-      <p className="sub">All layers carry CRS metadata (EPSG:4326). Click a station for details.</p>
+      <h1>Map</h1>
+      <p className="sub">Select what to show on the map. Click a station to see its details.</p>
       <div className="panel">
         <div className="mapbar">
           <label>Station layer<select value={metric} onChange={(e) => setMetric(e.target.value)}>

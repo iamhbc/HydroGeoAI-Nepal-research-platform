@@ -113,6 +113,7 @@ docs/               research design, methods, evaluation, reproducibility, roadm
 10. [API reference](docs/09_api.md)
 11. [Hugging Face release](docs/10_huggingface.md)
 12. [Paper and poster outline](docs/11_paper_outline.md)
+13. [Writing style for the user interface (ASD-STE100)](docs/12_writing_style.md)
 
 ## Git / GitHub / Hugging Face
 

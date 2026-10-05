@@ -46,3 +46,4 @@ hf/export/
 
 # separate clone of github.com/iamhbc/HydroGeoAI-Nepal (not part of this repo)
 /HydroGeoAI-Nepal/
+*.tsbuildinfo

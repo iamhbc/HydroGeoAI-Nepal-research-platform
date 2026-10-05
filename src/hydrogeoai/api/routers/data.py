@@ -43,6 +43,47 @@ def _select_stations(station_id: str | None, basin: str | None, province: str | 
     return st.station_id.tolist()
 
 
+_OVERVIEW_CACHE: dict[str, dict] = {}
+
+
+@router.get("/overview")
+def overview():
+    """One small, cached summary for the landing page (computed once per dataset + model version)."""
+    st = get_state()
+    s = st.data
+    dep = st.registry.deployed_model()
+    key = f"{s.version}|{dep['id'] if dep else None}"
+    if key in _OVERVIEW_CACHE:
+        return _OVERVIEW_CACHE[key]
+    obs, stations = s.obs, s.stations
+    last = obs.date.max()
+    year = obs[obs.date > last - pd.Timedelta(days=365)]
+    meta = s.metadata
+    out = {
+        "dataset_version": s.version,
+        "synthetic": "synthetic" in str(meta.get("source", "")).lower(),
+        "period": [str(obs.date.min().date()), str(last.date())],
+        "n_stations": int(stations.station_id.nunique()),
+        "n_basins": int(stations.basin.nunique()),
+        "elevation_range_m": [int(stations.elevation_m.min()), int(stations.elevation_m.max())],
+        "last_12_months": {
+            "extreme_wet_days": int(np.nansum(year["extreme_wet_day"])),
+            "hot_days": int(np.nansum(year["hot_day"])),
+            "dry_spell_days": int(np.nansum(year["dry_spell"])),
+            "whiplash_events": int((pd.to_datetime(s.whiplash.transition_date) > last - pd.Timedelta(days=365)).sum()),
+        },
+        "data_quality": {"errors_removed": int(meta.get("qc_summary", {}).get("n_errors", 0)),
+                         "missing_rain_pct": float(meta.get("missing_pct", {}).get("precip", 0.0))},
+        "model": None if dep is None else {
+            "id": dep["id"], "trained_on": (dep.get("metrics") or {}).get("split_mode"),
+            "auprc": (dep.get("metrics") or {}).get("auprc"),
+        },
+    }
+    _OVERVIEW_CACHE.clear()
+    _OVERVIEW_CACHE[key] = out
+    return out
+
+
 @router.get("/stations")
 def stations(basin: str | None = None, province: str | None = None):
     st = get_state().data.stations

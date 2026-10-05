@@ -3,7 +3,7 @@ import { API } from "@/lib/api";
 export default function Docs() {
   return (
     <>
-      <h1>Documentation</h1>
+      <h1>Help and methods</h1>
       <p className="sub">Full documentation lives in <code>docs/</code> of the repository. API reference: <a href={`${API}/docs`} target="_blank">{API}/docs</a>.</p>
       <div className="panel"><h2>Central research question</h2>
         <p>Can multimodal geospatial-temporal representation learning improve the detection and characterization of hydroclimatic
