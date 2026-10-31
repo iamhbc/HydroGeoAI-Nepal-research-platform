@@ -20,4 +20,4 @@ Start with `make api`. Interactive documentation is at `http://localhost:8000/do
 | GET/POST | `/experiments` · `/experiments/{id}` · `/experiments/{id}/tables/{name}` · `/figures/{name}` · `/compare?ids=` | registry; launch `{profile: quick\|main, modes}` |
 | * | `/admin/...` (header `X-API-Key`) | `status`, `logs`, `jobs`, `datasets/build`, `datasets/upload`, `datasets/{key}/{qc,approve,archive}`, `models/{id}/{deploy,archive}`, `models/{name}/rollback`, `models/register`, `reload` |
 
-Set `HYDROGEOAI_ADMIN_KEY` (default `change-me`, dev only) and `HYDROGEOAI_CORS` before exposing the API.
+Set `HYDROGEOAI_ADMIN_KEY` to a private key and configure `HYDROGEOAI_CORS` before exposing the API. Researcher actions are disabled when the key is empty or the default `change-me`. Both `/admin/...` and `POST /experiments` require this key in the `X-API-Key` header. Enter it in the Researcher API key field to launch experiments from the web UI; experiment listings remain public.

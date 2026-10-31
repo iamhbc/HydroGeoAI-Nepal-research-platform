@@ -5,11 +5,12 @@ from pathlib import Path
 from typing import Literal
 
 import pandas as pd
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
 
 from ..state import get_state
+from .admin import require_key
 
 router = APIRouter(tags=["experiments"])
 
@@ -19,7 +20,7 @@ class ExperimentRequest(BaseModel):
     modes: list[Literal["temporal", "spatial", "spatiotemporal"]] | None = None
 
 
-@router.post("/experiments")
+@router.post("/experiments", dependencies=[Depends(require_key)])
 def launch(req: ExperimentRequest):
     from ...experiments.runner import run
     jid = get_state().jobs.submit(f"experiment:{req.profile}", run, f"configs/experiments/{req.profile}.yaml", req.modes)
