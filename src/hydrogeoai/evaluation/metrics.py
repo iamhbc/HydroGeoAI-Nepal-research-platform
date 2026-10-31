@@ -51,6 +51,9 @@ def expected_calibration_error(y, p, n_bins: int = 15, strategy: str = "quantile
 def reliability_curve(y, p, n_bins: int = 10) -> dict:
     y, p = np.asarray(y), np.asarray(p)
     edges = np.unique(np.quantile(p, np.linspace(0, 1, n_bins + 1)))
+    # Constant forecasts still form one populated calibration bin.
+    if len(edges) == 1:
+        edges = np.array([-np.inf, np.inf])
     idx = np.clip(np.digitize(p, edges[1:-1]), 0, len(edges) - 2)
     out = {"mean_predicted": [], "observed_frequency": [], "count": []}
     for b in range(len(edges) - 1):
