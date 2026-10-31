@@ -5,12 +5,13 @@ import { Caveat, Status, useApi } from "@/components/ui";
 import { api } from "@/lib/api";
 
 export default function Experiments() {
+  const [adminKey, setAdminKey] = useState("");
   const [tick, setTick] = useState(0);
   const exps = useApi<any[]>("/experiments", [tick]);
   const [msg, setMsg] = useState<string | null>(null);
   async function launch(profile: string) {
     try {
-      const r = await api("/experiments", { method: "POST", body: JSON.stringify({ profile, modes: profile === "quick" ? ["temporal"] : null }) });
+      const r = await api("/experiments", { method: "POST", adminKey, body: JSON.stringify({ profile, modes: profile === "quick" ? ["temporal"] : null }) });
       setMsg(`Launched job ${r.job_id}. Refresh in a few minutes.`);
       setTimeout(() => setTick((t) => t + 1), 4000);
     } catch (e: any) { setMsg(e.message); }
@@ -20,8 +21,9 @@ export default function Experiments() {
       <h1>Research Experiments</h1>
       <p className="sub">Each experiment stores dataset version, code version, configuration, periods, geographic split, seed, metrics and artifacts.</p>
       <div className="panel field-row">
-        <button onClick={() => launch("quick")}>Launch quick experiment (temporal split)</button>
-        <button className="ghost" onClick={() => launch("main")}>Launch main experiment (all splits, ~2–4 h)</button>
+        <label>Researcher API key<input type="password" autoComplete="off" value={adminKey} onChange={(e) => setAdminKey(e.target.value)} /></label>
+        <button disabled={!adminKey.trim()} onClick={() => launch("quick")}>Launch quick experiment (temporal split)</button>
+        <button className="ghost" disabled={!adminKey.trim()} onClick={() => launch("main")}>Launch main experiment (all splits, ~2–4 h)</button>
         <button className="ghost" onClick={() => setTick((t) => t + 1)}>Refresh</button>
       </div>
       {msg && <Caveat>{msg}</Caveat>}

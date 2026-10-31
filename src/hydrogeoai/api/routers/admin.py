@@ -1,6 +1,7 @@
 """Admin / researcher endpoints (require X-API-Key == HYDROGEOAI_ADMIN_KEY)."""
 from __future__ import annotations
 
+import secrets
 import shutil
 from pathlib import Path
 
@@ -17,7 +18,12 @@ router = APIRouter(prefix="/admin", tags=["admin"])
 
 
 def require_key(x_api_key: str | None = Header(None)):
-    if x_api_key != get_state().admin_key:
+    if not x_api_key:
+        raise HTTPException(401, "invalid or missing X-API-Key")
+    configured = get_state().admin_key
+    if not configured or not configured.strip() or configured.strip() == "change-me":
+        raise HTTPException(503, "Set HYDROGEOAI_ADMIN_KEY to enable researcher actions")
+    if not secrets.compare_digest(x_api_key.encode(), configured.encode()):
         raise HTTPException(401, "invalid or missing X-API-Key")
 
 
